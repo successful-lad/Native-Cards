@@ -8,48 +8,37 @@ import {
   TextInput,
 } from 'react-native';
 
-const BankInput = ({initialValue = 0, min = 0, max = 100}) =>  {
-  const [count, setCount] = useState(`${initialValue}`);
+const BankInput = ({
+                     balance = 0,
+                     min = 0,
+                     max = 1000000,
+                     addValue,
+                     removeValue}) =>  {
   const [step, setStep] = useState('1');
 
-  const addValue = () => {
-    if (+count + +step <= max) {
-      setCount(value => `${+value + +step}`)
-    }
-    else {
-      setCount(`${max}`)
-    }
-  }
-  const removeValue = () => {
-    if (+count - +step >= min) {
-      setCount(value => `${+value - +step}`)
-    } else {
-      setCount(`${min}`)
-    }
-  }
   return (
-    <View>
-      <View>
+    <View style={styles.bankInput}>
+      <View style={styles.inpWrapper}>
         <Text>
           Задайте шаг
         </Text>
         <TextInput
-          onChangeText={text => setStep(text)}
+          onChangeText={value => setStep(value)}
           value={step}
         />
       </View>
       <TouchableOpacity style={styles.buttonWrapper}>
         <TouchableOpacity
-          onPress={addValue}
+          onPress={() => addValue(step, max)}
           style={styles.leftButton}
         >
           <Text style={styles.leftButtonText}>
             {`+ ${step}`}
           </Text>
         </TouchableOpacity>
-        <Text>{count}</Text>
+        <Text style={styles.balance}>{balance}</Text>
         <TouchableOpacity
-          onPress={removeValue}
+          onPress={() => removeValue(step, min)}
           style={styles.rightButton}
         >
           <Text style={styles.rightButtonText}>
@@ -61,6 +50,20 @@ const BankInput = ({initialValue = 0, min = 0, max = 100}) =>  {
   )
 };
 const styles = StyleSheet.create({
+  bankInput: {
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  inpWrapper: {
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   buttonWrapper: {
     width: 200,
     display: 'flex',
@@ -81,6 +84,9 @@ const styles = StyleSheet.create({
   },
   leftButtonText: {
     color: 'white',
+  },
+  balance: {
+    fontSize:20,
   },
   rightButton: {
     height: 50,

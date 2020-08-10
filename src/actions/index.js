@@ -5,5 +5,5 @@ import updateCardInfo from "./updateCardInfo";
 export {
   updateTitle,
   addNewCard,
-  updateCardInfo
+  updateCardInfo,
 };

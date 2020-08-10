@@ -1,9 +1,17 @@
 import React from 'react';
-import { StyleSheet, Text, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+} from "react-native";
 
-const Card = ({cardName, balance}) => {
+const Card = ({cardName, balance, push}) => {
   return(
-     <View style={styles.wrapper}>
+     <TouchableOpacity
+       style={styles.wrapper}
+       onPress={push}
+      >
        <View style={styles.container}>
          <View style={styles.cardName}>
            <Text style={styles.cardNameText}>{cardName}</Text>
@@ -14,7 +22,7 @@ const Card = ({cardName, balance}) => {
            </Text>
          </View>
        </View>
-     </View>
+     </TouchableOpacity>
   )
 };
 
