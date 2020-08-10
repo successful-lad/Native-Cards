@@ -17,7 +17,7 @@ const CardInfoScreen = ({ route }) => {
   },[])
 
   const {cards, updateCardInfo } = useCardData();
-  console.log(cards)
+
   const { cardId } = route.params;
   const currentCard = cards.find((card, index) => index === cardId);
 
