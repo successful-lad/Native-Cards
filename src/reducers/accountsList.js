@@ -12,11 +12,15 @@ const initialState = {cards:[
         return {cards: state.cards.map((card, id) =>
             id === action.payload.id ?
               {...card,
-                transactionHistory: [action.payload.text, ...card.transactionHistory],
+                transactionHistory: [
+                  {transText: action.payload.text,
+                   afterTransBalance: action.payload.balance
+                  }
+                  , ...card.transactionHistory],
                 balance: +action.payload.balance} : card)}
       }
       case ADD_NEW_CARD : {
-        return {cards:[...state.cards, action.payload.cards]}
+        return {cards:[action.payload.cards, ...state.cards ]}
       }
       default: {
         return state;

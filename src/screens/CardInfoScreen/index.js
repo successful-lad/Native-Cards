@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import {
   View,
-  Text,
-  Button
+  ScrollView,
+  StyleSheet,
 } from 'react-native';
 import { useCardData } from '../../hooks';
-import { BankInput } from "../../components";
+import { BankInput, LogItem } from "../../components";
 
 const CardInfoScreen = ({ route }) => {
 
@@ -15,13 +15,12 @@ const CardInfoScreen = ({ route }) => {
     if (balance === '0')
     setBalance(currentCard.balance)
   },[])
-
   const {cards, updateCardInfo } = useCardData();
 
   const { cardId } = route.params;
   const currentCard = cards.find((card, index) => index === cardId);
 
-  const addValue = (step, max) => {
+  const addValue = (max, step = 20,) => {
     if (+balance + +step <= max) {
       setBalance(value => `${+value + +step}`)
     }
@@ -29,46 +28,60 @@ const CardInfoScreen = ({ route }) => {
       setBalance(`${max}`)
     }
   }
-  const removeValue = (step, min) => {
+  const removeValue = (min, step = 20) => {
     if (+balance - +step >= min) {
       setBalance(value => `${+value - +step}`)
     } else {
       setBalance(`${min}`)
     }
   }
+
+  const onSave = () => {
+    updateCardInfo({
+      text: currentCard.balance < balance ? `Зачисление на счет суммы - ${balance - currentCard.balance}$`
+        : `Снятие со счета суммы - ${currentCard.balance - balance}$`,
+      id: cardId,
+      balance,
+    })
+  };
+
   return(
-    <View>
-      <Text>
-        Card Screen
-      </Text>
-      {/*<Button*/}
-      {/*  title="add trans info"*/}
-      {/*  onPress={() => updateTransactionHistory({text:'чет поменялось', id: cardId})}*/}
-      {/*/>*/}
-      <BankInput
-        balance={balance}
-        addValue={addValue}
-        removeValue={removeValue}
-      />
-      <Button title='Сохранить изменения'
-              onPress={() => {
-                updateCardInfo({
-                  text: currentCard.balance < balance ? `Ваш баланс увеличился на ${balance - currentCard.balance}, и теперь составляет ${balance}`
-                    : `Ваш баланс уменьшился, на ${currentCard.balance - balance}, и теперь составляет ${balance}`,
-                  id: cardId,
-                  balance,
-                });
-              }}
-      />
-      <View>
-        {currentCard.transactionHistory.map((info, id) =>(
-          <Text key={id}>
-            {info}
-          </Text>
-        ))}
+    <View style={styles.wrapper}>
+      <View style={styles.transContainer}>
+        <BankInput
+          balance={balance}
+          addValue={addValue}
+          removeValue={removeValue}
+          onSave={onSave}
+          disabled={+currentCard.balance === +balance}
+          buttonText='Сохранить изменения'
+          onSetBalance={setBalance}
+        />
       </View>
+      <ScrollView>
+        {currentCard.transactionHistory.map((log, id) =>(
+          <LogItem
+            logText={log.transText}
+            key={id}
+            isInc={log.transText.indexOf('Зачисление') !== -1}
+            balance={log.afterTransBalance}
+          />
+        ))}
+      </ScrollView>
     </View>
   )
 };
+
+const styles = StyleSheet.create({
+  wrapper: {
+    backgroundColor: 'white',
+    height: '100%',
+  },
+  transContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    width: '100%',
+  }
+});
 
 export default CardInfoScreen;

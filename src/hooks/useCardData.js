@@ -1,7 +1,7 @@
 import { useMemo, useCallback } from 'react';
 import { bindActionCreators } from 'redux';
 import { useDispatch, useSelector } from 'react-redux';
-import { addNewCard, updateCardInfo, updateTransHistory } from "../actions";
+import { addNewCard, updateCardInfo } from "../actions";
 
 import { getAccList } from '../reducers';
 
@@ -25,11 +25,6 @@ export default () => {
         id: cards.id,
         text: cards.text,
         balance: cards.balance,
-      }),
-      updateTransactionHistory: trInfo =>updateTransHistory({
-        id: trInfo.id,
-        text: trInfo.text,
-        balance: trInfo.balance,
       }),
     }, dispatch),
     [dispatch]);

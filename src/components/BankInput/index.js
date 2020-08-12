@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import {
   View,
@@ -13,38 +13,55 @@ const BankInput = ({
                      min = 0,
                      max = 1000000,
                      addValue,
-                     removeValue}) =>  {
-  const [step, setStep] = useState('1');
+                     removeValue,
+                     onSave,
+                     disabled,
+                     buttonText,
+                     onSetBalance,
+                   }) =>  {
+
+  const enterNumb = text =>{
+    const numbArr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    return text.split('').filter(word => numbArr.includes(+word)).join('');
+  }
 
   return (
     <View style={styles.bankInput}>
       <View style={styles.inpWrapper}>
-        <Text>
-          Задайте шаг
-        </Text>
-        <TextInput
-          onChangeText={value => setStep(value)}
-          value={step}
-        />
       </View>
       <TouchableOpacity style={styles.buttonWrapper}>
         <TouchableOpacity
-          onPress={() => addValue(step, max)}
+          onPress={() => addValue(max)}
           style={styles.leftButton}
         >
           <Text style={styles.leftButtonText}>
-            {`+ ${step}`}
+            {`+ ${20}`}
           </Text>
         </TouchableOpacity>
-        <Text style={styles.balance}>{balance}</Text>
+        <TextInput
+          style={styles.enterInput}
+          onChangeText={text => onSetBalance(+enterNumb(text))}
+          value={`${balance}`}
+        />
         <TouchableOpacity
-          onPress={() => removeValue(step, min)}
+          onPress={() => removeValue(min)}
           style={styles.rightButton}
         >
           <Text style={styles.rightButtonText}>
-            {`- ${step}`}
+            {`- ${20}`}
           </Text>
         </TouchableOpacity>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[disabled && {opacity: 0.4}, styles.saveButton]}
+        onPress={onSave}
+        disabled={disabled}
+      >
+        <Text
+          style={styles.saveButtonText}
+        >
+          {buttonText}
+        </Text>
       </TouchableOpacity>
     </View>
   )
@@ -53,10 +70,12 @@ const styles = StyleSheet.create({
   bankInput: {
     display: 'flex',
     width: '100%',
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 20,
     marginBottom: 20,
+    flexWrap: 'wrap',
   },
   inpWrapper: {
     display: 'flex',
@@ -99,6 +118,26 @@ const styles = StyleSheet.create({
   },
   rightButtonText: {
     color: 'white',
+  },
+  saveButton: {
+    width: 100,
+    padding: 8,
+    backgroundColor: '#4682B4',
+    borderRadius: 6,
+    marginLeft: 10,
+  },
+  saveButtonText: {
+    color: 'white',
+    fontSize: 15,
+  },
+  enterInput: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    paddingLeft: 20,
+    paddingRight: 20,
+    borderRadius: 5,
+    maxWidth: 100,
   }
   });
 export default BankInput;
