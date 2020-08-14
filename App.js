@@ -1,16 +1,38 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { CardScreen, CardInfoScreen } from './src/screens';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Provider } from 'react-redux';
+import { CardScreen, CardInfoScreen } from './src/screens';
 import store from "./src/configureStore";
+import {View, Text} from "react-native";
 
 
-const Stack = createStackNavigator();
+const TabNavigator = createBottomTabNavigator();
+const StackNavigator = createStackNavigator();
+
+const SecondScreen = () => {
+  return (
+    <View>
+      <Text>
+        SecondScreen
+      </Text>
+    </View>
+  )
+};
+
+const MyTabs = () => {
+  return (
+    <TabNavigator.Navigator>
+      <TabNavigator.Screen name="CardStackScreen" component={CardScreen} />
+      <TabNavigator.Screen name="SecondScreen" component={SecondScreen} />
+    </TabNavigator.Navigator>
+  );
+}
 
 const NavStack = () => {
   return (
-    <Stack.Navigator
+    <StackNavigator.Navigator
       screenOptions={{
         headerTitleAlign: 'center',
         headerStyle: {
@@ -22,17 +44,17 @@ const NavStack = () => {
         },
       }}
     >
-      <Stack.Screen
+      <StackNavigator.Screen
         name="CardScreen"
-        component={CardScreen}
+        component={MyTabs}
         options={{ title: 'CardScreen' }}
       />
-      <Stack.Screen
+      <StackNavigator.Screen
         name="CardInfoScreen"
         component={CardInfoScreen}
         options={{ title: 'CardInfoScreen' }}
       />
-    </Stack.Navigator>
+    </StackNavigator.Navigator>
   );
 }
 const App: () => React$Node = () => {

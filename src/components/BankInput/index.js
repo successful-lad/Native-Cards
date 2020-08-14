@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TextInput,
 } from 'react-native';
+import onlyNumbers from "../../helpers/onlyNumbers";
 
 const BankInput = ({
                      balance = 0,
@@ -20,10 +21,10 @@ const BankInput = ({
                      onSetBalance,
                    }) =>  {
 
-  const enterNumb = text =>{
-    const numbArr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-    return text.split('').filter(word => numbArr.includes(+word)).join('');
-  }
+  // const enterNumb = text =>{
+  //   const numbArr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+  //   return text.split('').filter(word => numbArr.includes(+word)).join('');
+  // }
 
   return (
     <View style={styles.bankInput}>
@@ -40,7 +41,7 @@ const BankInput = ({
         </TouchableOpacity>
         <TextInput
           style={styles.enterInput}
-          onChangeText={text => onSetBalance(+enterNumb(text))}
+          onChangeText={text => onSetBalance(+onlyNumbers(text))}
           value={`${balance}`}
         />
         <TouchableOpacity

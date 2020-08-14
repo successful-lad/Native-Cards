@@ -12,7 +12,6 @@ const CardInfoScreen = ({ route }) => {
   const [balance, setBalance] = useState('0');
 
   useEffect(() => {
-    if (balance === '0')
     setBalance(currentCard.balance)
   },[])
   const {cards, updateCardInfo } = useCardData();
